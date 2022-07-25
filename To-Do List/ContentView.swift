@@ -9,12 +9,12 @@ import SwiftUI
 
 struct ContentView: View {
     @ObservedObject var toDoList = ToDoList()
-    [ToDoItem(priority: "High", description: "Take out trash", dueDate: Date()), ToDoItem(priority: "Medium", description: "Pick up clothes", dueDate: Date()), ToDoItem(priority: "Low", description: "Eat a donut", dueDate: Date())]
+    @State private var showingAddItemView = false
+    
     var body: some View {
         NavigationView {
             List {
                 ForEach(toDoList.items) { item in
-                    
                     HStack {
                         VStack(alignment: .leading) {
                             Text(item.priority)
@@ -33,8 +33,16 @@ struct ContentView: View {
                     toDoList.items.remove(atOffsets: indexSet)
                 }
             }
-            .navigationBarTitle("To Do List")
-            .navigationBarItems(leading: EditButton())
+            .navigationBarTitle("To-Do List", displayMode: .inline)
+            .sheet(isPresented: $showingAddItemView, content: {
+                AddItemView(toDoList: toDoList)
+            })
+            .navigationBarItems(leading: EditButton(),
+                                trailing: Button(action: {
+                                showingAddItemView = true}) {
+                                Image(systemName: "plus")
+                })
+            
         }
         
     }

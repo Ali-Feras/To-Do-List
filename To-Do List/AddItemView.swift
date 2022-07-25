@@ -18,16 +18,20 @@ struct AddItemView: View {
         NavigationView {
             Form {
                 Picker("Priority", selection: $priority) {
-                    ForEach(Self.priorities, id \.self) { priority in
+                    ForEach(Self.priorities, id: \.self) { priority in
                         Text(priority)
                     }
                 }
+                TextField("Description", text: $description)
+                DatePicker("Due Date", selection: $dueDate, displayedComponents: .date)
             }
+            .navigationBarTitle("Add New To-Do Item", displayMode: .inline)
+            
         }
     }
-struct AddItemView_Previews: PreviewProvider {
-    static var previews: some View {
-        AddItemView(toDoList: ToDoList())
+    struct AddItemView_Previews: PreviewProvider {
+        static var previews: some View {
+            AddItemView(toDoList: ToDoList())
         }
     }
 }
